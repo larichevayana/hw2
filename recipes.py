@@ -54,6 +54,8 @@ class Recipe:
             return False
 
     def scale(self, ratio):
+        if not self.is_valid_ratio(ratio):
+            raise ValueError("Значение коэффициента должно быть положительным")
         m = []
         i = 0
         s = len(self.ingredients)
