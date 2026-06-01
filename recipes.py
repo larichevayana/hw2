@@ -115,3 +115,17 @@ class ShoppingList:
         m = ShoppingList()
         m.items = self.items + other.items
         return m
+class DietaryRecipe(Recipe):
+    def __init__(self, title, diet_type, ingredients):
+        super().__init__(title, ingredients)
+        self.diet_type = diet_type
+
+    def scale(self, ratio):
+        x = super().scale(ratio)
+        return DietaryRecipe(x.title, self.diet_type, x.ingredients)
+
+    def __str__(self):
+        ans = "[" + self.diet_type + "] " + self.title + "\nИнгредиенты:\n"
+        for i in self.ingredients:
+            ans = ans + "  " + str(i) + "\n"
+        return ans
