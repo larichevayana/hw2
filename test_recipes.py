@@ -89,3 +89,86 @@ def test_len():
     r.add_ingredient(Ingredient("Сливки", 100.0, "г"))
     r.add_ingredient(Ingredient("Бекон", 200.0, "г"))
     assert len(r) == 3
+import pytest
+from recipes import Ingredient, Recipe, ShoppingList
+
+def testadd_recipe():
+    s = ShoppingList()
+    r = Recipe("Карбонара", [])
+    r.add_ingredient(Ingredient("Бекон", 200.0, "г"))
+    s.add_recipe(r, 2)
+    assert len(s.items) == 1
+    i = s.items[0][0]
+    assert i.quantity == 400.0
+
+def testadd_recipee():
+    s = ShoppingList()
+    r = Recipe("Карбонара", [])
+    try:
+        s.add_recipe(r, 0)
+        assert False, "Исключение не сработало при 0"
+    except ValueError:
+        pass
+    try:
+        s.add_recipe(r, -3)
+        assert False, "Исключение не сработало при -3"
+    except ValueError:
+        pass
+
+def testudalit():
+    s = ShoppingList()
+    r = Recipe("Карбонара", [])
+    r.add_ingredient(Ingredient("Бекон", 200.0, "г"))
+    rr = Recipe("Салат", [])
+    rr.add_ingredient(Ingredient("Помидор", 300.0, "г"))
+    s.add_recipe(r, 1)
+    s.add_recipe(rr, 1)
+    s.remove_recipe("Карбонара")
+    assert len(s.items) == 1
+    assert s.items[0][1] == "Салат"
+
+def testudalit_not():
+    s = ShoppingList()
+    r = Recipe("Карбонара", [])
+    r.add_ingredient(Ingredient("Бекон", 200.0, "г"))
+    s.add_recipe(r, 1)
+    s.remove_recipe("Салат")
+    assert len(s.items) == 1
+
+def testsum():
+    s = ShoppingList()
+    r = Recipe("Карбонара", [])
+    r.add_ingredient(Ingredient("Масло", 200.0, "г"))
+    rr = Recipe("Салат", [])
+    rr.add_ingredient(Ingredient("Масло", 50.0, "г"))
+    s.add_recipe(r, 1)
+    s.add_recipe(rr, 1)
+    m = s.get_list()
+    assert len(m) == 1
+    assert m[0].name == "Масло"
+    assert m[0].quantity == 250.0
+
+def test_get_lists():
+    s = ShoppingList()
+    r = Recipe("Карбонара", [])
+    r.add_ingredient(Ingredient("Бекон", 200.0, "г"))
+    r.add_ingredient(Ingredient("Яйца", 3, "шт"))
+    r.add_ingredient(Ingredient("Сливки", 100.0, "г"))
+    s.add_recipe(r, 1)
+    m = s.get_list()
+    ans = [i.name for i in m]
+    assert ans == ["Бекон", "Сливки", "Яйца"]
+
+def test_add():
+    s = ShoppingList()
+    r = Recipe("Карбонара", [])
+    r.add_ingredient(Ingredient("Бекон", 200.0, "г"))
+    s.add_recipe(r, 1)
+    ss = ShoppingList()
+    rr = Recipe("Салат", [])
+    rr.add_ingredient(Ingredient("Морковь", 100.0, "г"))
+    ss.add_recipe(rr, 1)
+    s3 = s + ss
+    assert len(s3.items) == 2
+    assert len(s.items) == 1
+    assert len(ss.items) == 1
