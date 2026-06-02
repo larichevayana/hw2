@@ -12,6 +12,7 @@
 
 ## Установка
 
+```bash
 git clone https://github.com/larichevayana/hw2.git
 cd hw2
 pip install -r requirements.txt
